@@ -71,8 +71,8 @@ const Home: FC = () => {
 			<div>
 				<div
 					className={`${
-						postId ? 'h-[20vh]' : 'h-[95.5vh]'
-					} flex flex-col items-center justify-center transition-all px-4 md:px-0 relative overflow-hidden`}
+						postId ? 'md:h-[20vh]' : 'h-[95.5vh]'
+					} flex flex-col items-center justify-center transition-all py-6 px-4 md:px-0 relative overflow-hidden`}
 				>
 					<div className="absolute inset-0 -z-10 h-screen">
 						<Image src={bgImage} placeholder="blur" layout="fill" className="object-cover" alt="" />
@@ -135,7 +135,7 @@ const Home: FC = () => {
 							</div>
 						</>
 					)}
-					<div className="absolute bottom-3 inset-x-0 flex items-center justify-center">
+					<div className="md:absolute mt-2 md:mt-0 bottom-3 inset-x-0 flex items-center justify-center">
 						<p>
 							Built by{' '}
 							<a
