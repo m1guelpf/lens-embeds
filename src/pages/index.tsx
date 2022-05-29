@@ -46,7 +46,7 @@ const Home: FC = () => {
 		title: 'Easily embed Lens posts anywhere',
 		description:
 			'One-click embeds for all your links posts, mirrors & comments. Bring your content anywhere, effortlessly!',
-		image: `https://embeds.withlens.app${cardImage.src}`,
+		image: `https://embed.withlens.app${cardImage.src}`,
 	}
 
 	return (
