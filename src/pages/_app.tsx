@@ -1,24 +1,29 @@
+import { SWRConfig } from 'swr'
+import apollo from '@/lib/apollo'
 import 'tailwindcss/tailwind.css'
-import { APP_NAME } from '@/lib/consts'
-import '@rainbow-me/rainbowkit/styles.css'
-import { chain, createClient, WagmiConfig } from 'wagmi'
-import { apiProvider, configureChains, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-
-const { chains, provider } = configureChains(
-	[chain.optimism],
-	[apiProvider.infura(process.env.NEXT_PUBLIC_INFURA_ID), apiProvider.fallback()]
-)
-
-const { connectors } = getDefaultWallets({ appName: APP_NAME, chains })
-const wagmiClient = createClient({ autoConnect: true, connectors, provider })
+import { ApolloProvider } from '@apollo/client'
+import 'react-medium-image-zoom/dist/styles.css'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { localStorageProvider } from '@/utils/swr'
+import { SkeletonTheme } from 'react-loading-skeleton'
 
 const App = ({ Component, pageProps }) => {
 	return (
-		<WagmiConfig client={wagmiClient}>
-			<RainbowKitProvider chains={chains}>
-				<Component {...pageProps} />
-			</RainbowKitProvider>
-		</WagmiConfig>
+		<ApolloProvider client={apollo}>
+			<SWRConfig
+				value={{
+					provider: localStorageProvider,
+					revalidateIfStale: false,
+					revalidateOnFocus: false,
+					shouldRetryOnError: false,
+					fetcher: url => fetch(url).then(res => res.json()),
+				}}
+			>
+				<SkeletonTheme baseColor="#ffffff30" highlightColor="#ffffff40" width={100}>
+					<Component {...pageProps} />
+				</SkeletonTheme>
+			</SWRConfig>
+		</ApolloProvider>
 	)
 }
 

@@ -1,150 +1,156 @@
-import { FC } from 'react'
-import { APP_NAME } from '@/lib/consts'
-import { BookOpenIcon, CodeIcon, ShareIcon } from '@heroicons/react/outline'
+import Head from 'next/head'
+import Image from 'next/image'
+import copy from 'copy-to-clipboard'
+import bgImage from '@images/bg.png'
+import cardImage from '@images/card.jpg'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 const Home: FC = () => {
+	const iframeRef = useRef<HTMLIFrameElement>(null)
+	const [copied, setCopied] = useState<boolean>(false)
+	const [url, setURL] = useState<string>('')
+
+	const postId = useMemo<string | null>(() => {
+		const match = url?.match(/(0x\w*-0x\w*)/i)
+		if (!match) return
+
+		return match[0]
+	}, [url])
+
+	const embedCode = useMemo(() => {
+		if (!postId) return
+
+		return `<span id="lens-embed" data-post-id="${postId}" /><script src="https://embed.withlens.app/script.js"></script>`
+	}, [postId])
+
+	const copyToClipboard = () => {
+		copy(embedCode)
+		setCopied(true)
+		setTimeout(() => setCopied(false), 1000)
+	}
+
+	useEffect(() => {
+		const onMessage = ({ data }: MessageEvent) => {
+			if (data?.t != 'lensembed') return
+
+			const iframe = [...document.getElementsByTagName('iframe')].find(frame => frame.src == data.u)
+
+			iframe.width = data.w
+			iframe.height = data.h
+		}
+
+		window.addEventListener('message', onMessage)
+	}, [])
+
+	const meta = {
+		title: 'Easily embed Lens posts anywhere',
+		description:
+			'One-click embeds for all your links posts, mirrors & comments. Bring your content anywhere, effortlessly!',
+		image: `https://embeds.withlens.app${cardImage.src}`,
+	}
+
 	return (
-		<div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-			<div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
-				<div className="flex justify-center pt-8 sm:justify-start sm:pt-0">
-					<h1 className="text-6xl font-bold dark:text-white">{APP_NAME}</h1>
-				</div>
+		<>
+			<Head>
+				<title>{meta.title}</title>
+				<meta name="title" content={meta.title} />
+				<meta name="description" content={meta.description} />
 
-				<div className="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-					<div className="grid grid-cols-1 md:grid-cols-2">
-						<div className="p-6">
-							<div className="flex items-center">
-								<BookOpenIcon className="w-8 h-8 text-gray-500" />
-								<div className="ml-4 text-lg leading-7 font-semibold">
-									<a
-										href="https://laravel.com/docs"
-										className="underline text-gray-900 dark:text-white"
-									>
-										Next.js Docs
-									</a>
-								</div>
-							</div>
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://embeds.withlens.app" />
+				<meta property="og:title" content={meta.title} />
+				<meta property="og:description" content={meta.description} />
+				<meta property="og:image" content={meta.image} />
 
-							<div className="ml-12">
-								<div className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-									Next.js gives you the best developer experience with all the features you need for
-									production: hybrid static &amp; server rendering, TypeScript support, smart
-									bundling, route pre-fetching, and more. No config needed.
-								</div>
-							</div>
-						</div>
-
-						<div className="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
-							<div className="flex items-center">
-								<BookOpenIcon className="w-8 h-8 text-gray-500" />
-								<div className="ml-4 text-lg leading-7 font-semibold">
-									<a href="https://laracasts.com" className="underline text-gray-900 dark:text-white">
-										wagmi Docs
-									</a>
-								</div>
-							</div>
-
-							<div className="ml-12">
-								<div className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-									wagmi is a collection of React Hooks containing everything you need to start working
-									with Ethereum. wagmi makes it easy to display ENS and balance information, sign
-									messages, interact with contracts, and much more — all with caching, request
-									deduplication, and persistence.
-								</div>
-							</div>
-						</div>
-
-						<div className="p-6 border-t border-gray-200 dark:border-gray-700">
-							<div className="flex items-center">
-								<BookOpenIcon className="w-8 h-8 text-gray-500" />
-								<div className="ml-4 text-lg leading-7 font-semibold">
-									<a
-										href="https://laravel-news.com/"
-										className="underline text-gray-900 dark:text-white"
-									>
-										Tailwind Docs
-									</a>
-								</div>
-							</div>
-
-							<div className="ml-12">
-								<div className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-									Tailwind CSS is a highly customizable, low-level CSS framework that gives you all of
-									the building blocks you need to build bespoke designs without any annoying
-									opinionated styles you have to fight to override.
-								</div>
-							</div>
-						</div>
-
-						<div className="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">
-							<div className="flex items-center">
-								<CodeIcon className="w-8 h-8 text-gray-500" />
-								<div className="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white">
-									About this Template
-								</div>
-							</div>
-
-							<div className="ml-12">
-								<div className="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-									This starter kit is composed of{' '}
-									<a href="https://nextjs.org" className="underline" target="_blank" rel="noreferrer">
-										Next.js
-									</a>{' '}
-									and{' '}
-									<a
-										href="https://tailwindcss.com"
-										className="underline"
-										target="_blank"
-										rel="noreferrer"
-									>
-										Tailwind CSS
-									</a>
-									, with{' '}
-									<a
-										href="https://rainbowkit.com"
-										className="underline"
-										target="_blank"
-										rel="noreferrer"
-									>
-										RainbowKit
-									</a>
-									,{' '}
-									<a href="https://ethers.org" className="underline" target="_blank" rel="noreferrer">
-										ethers
-									</a>{' '}
-									&amp;{' '}
-									<a href="https://wagmi.sh" className="underline" target="_blank" rel="noreferrer">
-										wagmi
-									</a>{' '}
-									for all your web3 needs. It uses{' '}
-									<a
-										href="https://www.typescriptlang.org/"
-										className="underline"
-										target="_blank"
-										rel="noreferrer"
-									>
-										Typescript
-									</a>{' '}
-									and an opinionated directory structure for maximum dev confy-ness. Enjoy!
-								</div>
-							</div>
-						</div>
+				<meta property="twitter:card" content="summary_large_image" />
+				<meta property="twitter:url" content="https://embeds.withlens.app" />
+				<meta property="twitter:title" content={meta.title} />
+				<meta property="twitter:description" content={meta.description} />
+				<meta property="twitter:image" content={meta.image} />
+			</Head>
+			<div>
+				<div
+					className={`${
+						postId ? 'h-[20vh]' : 'h-[95.5vh]'
+					} flex flex-col items-center justify-center transition-all px-4 md:px-0 relative overflow-hidden`}
+				>
+					<div className="absolute inset-0 -z-10 h-screen">
+						<Image src={bgImage} placeholder="blur" layout="fill" className="object-cover" alt="" />
 					</div>
+					<p
+						className={`${
+							postId ? 'text-black' : 'text-white'
+						} text-4xl font-extralight mb-4 text-center transition`}
+					>
+						What would you like to embed?
+					</p>
+					<input
+						className={`${
+							postId ? 'bg-black text-gray-300 shadow' : 'text-gray-600 shadow'
+						} w-full max-w-lg rounded p-3 font-extralight `}
+						placeholder="Enter a Lenster URL"
+						type="url"
+						value={url}
+						onChange={event => setURL(event.target.value)}
+						required
+					/>
+					{url != 'https://lenster.xyz/posts/0xf5-0x17' && (
+						<button
+							className={`${postId ? 'text-black/60' : 'text-white/70'} underline mt-2 transition`}
+							onClick={() => setURL('https://lenster.xyz/posts/0xf5-0x17')}
+						>
+							or try an example
+						</button>
+					)}
 				</div>
-
-				<div className="flex justify-center mt-4 sm:items-center sm:justify-between">
-					<div className="text-center text-sm text-gray-500 sm:text-left">
-						<div className="flex items-center">
-							<ShareIcon className="-mt-px w-5 h-5 text-gray-400" />
-
-							<a href="https://twitter.com/m1guelpf" className="ml-1 underline">
-								Share
+				<div className={`flex flex-col items-center justify-around h-full p-4 md:px-0 bg-white`}>
+					{postId && (
+						<>
+							<div className="space-y-4">
+								<p className="text-xl font-extralight text-center">
+									To embed this post on your website, just paste the code below!
+								</p>
+								<div className="relative rounded overflow-hidden max-w-sm md:max-w-none mx-auto">
+									<code
+										onClick={copyToClipboard}
+										className="block w-full border p-2 font-sans shadow-inset text-xs md:text-sm text-gray-500 cursor-pointer hover:bg-gray-200 transition duration-300 whitespace-nowrap"
+									>
+										{embedCode}
+									</code>
+									<button
+										onClick={copyToClipboard}
+										className="absolute inset-y-0 right-0 py-1 px-4 bg-violet-400 text-white flex items-center justify-center text-sm md:text-base"
+									>
+										{copied ? 'Copied!' : 'Copy Code'}
+									</button>
+								</div>
+							</div>
+							<div className="mt-4">
+								<iframe
+									ref={iframeRef}
+									src={`/embed/${postId}`}
+									frameBorder="0"
+									allowFullScreen
+								></iframe>
+							</div>
+						</>
+					)}
+					<div className="absolute bottom-3 inset-x-0 flex items-center justify-center">
+						<p>
+							Built by{' '}
+							<a
+								className="font-medium"
+								href="https://lenster.xyz/u/m1guelpf.lens"
+								target="_blank"
+								rel="noreferrer"
+							>
+								@m1guelpf.lens
 							</a>
-						</div>
+						</p>
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 
