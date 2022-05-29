@@ -2,13 +2,20 @@ import Head from 'next/head'
 import Image from 'next/image'
 import copy from 'copy-to-clipboard'
 import bgImage from '@images/bg.png'
+import { useRouter } from 'next/router'
 import cardImage from '@images/card.jpg'
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 const Home: FC = () => {
+	const router = useRouter()
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [copied, setCopied] = useState<boolean>(false)
 	const [url, setURL] = useState<string>('')
+
+	useEffect(() => {
+		setURL((router.query.url as string) ?? '')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	const postId = useMemo<string | null>(() => {
 		const match = url?.match(/(0x\w*-0x\w*)/i)
