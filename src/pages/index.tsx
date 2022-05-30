@@ -122,7 +122,7 @@ const Home: FC = () => {
 						onChange={event => setURL(event.target.value)}
 						required
 					/>
-					{url != ('https://lenster.xyz/posts/0xf5-0x17' || '0x2cb8') && (
+					{(url != 'https://lenster.xyz/posts/0xf5-0x17' && url != '0x2cb8') && (
 						<button
 							className={`${postId ? 'text-black/60' : 'text-white/70'} underline mt-2 transition`}
 							onClick={() => {
