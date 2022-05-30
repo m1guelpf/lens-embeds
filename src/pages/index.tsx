@@ -9,6 +9,7 @@ const Home: FC = () => {
 	const iframeRef = useRef<HTMLIFrameElement>(null)
 	const [copied, setCopied] = useState<boolean>(false)
 	const [url, setURL] = useState<string>('')
+	const [postType, setPostType] = useState<number>(1)
 
 	useEffect(() => {
 		setURL(new URLSearchParams(window.location.search).get('url') ?? '')
@@ -16,17 +17,25 @@ const Home: FC = () => {
 	}, [])
 
 	const postId = useMemo<string | null>(() => {
-		const match = url?.match(/(0x\w*-0x\w*)/i)
-		if (!match) return
+		if (postType == 1) {
+			const match = url?.match(/(0x\w*-0x\w*)/i)
+			if (!match) return
 
-		return match[0]
-	}, [url])
+			return match[0]
+		} else if (postType == 2) {
+			const match = url?.match(/(0x\w*)/i)
+			if (!match) return
+			console.log(match[0])
+
+			return match[0]
+		}
+	}, [url, postType])
 
 	const embedCode = useMemo(() => {
 		if (!postId) return
 
-		return `<span id="lens-embed" data-post-id="${postId}" /><script src="https://embed.withlens.app/script.js"></script>`
-	}, [postId])
+		return `<span id="lens-embed" data-post-id="${postId}" data-post-type="${postType}" /><script src="https://embed.withlens.app/script.js"></script>`
+	}, [postId, postType])
 
 	const copyToClipboard = () => {
 		copy(embedCode)
@@ -89,20 +98,38 @@ const Home: FC = () => {
 					>
 						What would you like to embed?
 					</p>
+					<select className={`${
+							postId ? 'bg-black text-gray-300 shadow' : 'text-gray-600 shadow'
+						} w-full max-w-lg rounded p-3 font-extralight `}
+						style={{
+							marginBottom: 10,
+							height: 50
+						}}
+						onChange= {(e) => {
+							setPostType(Number(e.target.value))
+							setURL('')
+						}}>
+						<option value={1}>Post</option>
+						<option value={2}>Timeline</option>
+					</select>
 					<input
 						className={`${
 							postId ? 'bg-black text-gray-300 shadow' : 'text-gray-600 shadow'
 						} w-full max-w-lg rounded p-3 font-extralight `}
-						placeholder="Enter a Lenster URL"
+						placeholder={postType == 1 ? 'Enter a Lenster URL' : 'Eneter a Lenster profile id'}
 						type="url"
 						value={url}
 						onChange={event => setURL(event.target.value)}
 						required
 					/>
-					{url != 'https://lenster.xyz/posts/0xf5-0x17' && (
+					{url != ('https://lenster.xyz/posts/0xf5-0x17' || '0x2cb8') && (
 						<button
 							className={`${postId ? 'text-black/60' : 'text-white/70'} underline mt-2 transition`}
-							onClick={() => setURL('https://lenster.xyz/posts/0xf5-0x17')}
+							onClick={() => {
+								postType == 1?
+									setURL('https://lenster.xyz/posts/0xf5-0x17') :
+									setURL('0x2cb8')
+							}}
 						>
 							or try an example
 						</button>
