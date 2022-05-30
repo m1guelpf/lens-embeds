@@ -8,7 +8,7 @@ import { Maybe, Publication, PublicationQueryRequest } from '@/types/lens'
 
 const EmbedPage = () => {
 	const containerRef = useRef<HTMLDivElement>(null)
-	useResizeObserver(containerRef, entry =>
+	useResizeObserver(containerRef, entry => {
 		window.parent.postMessage(
 			{
 				t: 'lensembed',
@@ -18,7 +18,15 @@ const EmbedPage = () => {
 			},
 			'*'
 		)
-	)
+		window.parent.postMessage(
+			JSON.stringify({
+				src: window.location.toString(),
+				context: 'iframe.resize',
+				height: entry.contentRect.height,
+			}),
+			'*'
+		)
+	})
 
 	const {
 		query: { id, mini = false, cta = false, theme },
