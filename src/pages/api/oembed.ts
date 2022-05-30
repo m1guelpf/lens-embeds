@@ -19,8 +19,8 @@ const handler = async ({ query: { format = 'json', url } }: NextApiRequest, res:
 		version: '1.0',
 		provider_name: 'Lens Embed',
 		provider_url: 'https://embed.withlens.app/',
-		html: `<iframe src="https://embed.withlens.app/embed/${postId}" frameBorder="0" />`,
-		width: 600,
+		html: `<iframe src="https://embed.withlens.app/embed/${postId}" width="570" height="600" frameBorder="0" />`,
+		width: 570,
 		height: 600,
 	})
 }
