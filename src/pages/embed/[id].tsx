@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import LensEmbed from '@/components/LensEmbed'
