@@ -93,16 +93,16 @@ const Home: FC = () => {
 						className={`${
 							postId ? 'bg-black text-gray-300 shadow' : 'text-gray-600 shadow'
 						} w-full max-w-lg rounded p-3 font-extralight `}
-						placeholder="Enter a Lenster URL"
+						placeholder="Enter a Lens URL"
 						type="url"
 						value={url}
 						onChange={event => setURL(event.target.value)}
 						required
 					/>
-					{url != 'https://lenster.xyz/posts/0xf5-0x17' && (
+					{url != 'https://open.withlens.app/post/0xf5-0x17' && (
 						<button
 							className={`${postId ? 'text-black/60' : 'text-white/70'} underline mt-2 transition`}
-							onClick={() => setURL('https://lenster.xyz/posts/0xf5-0x17')}
+							onClick={() => setURL('https://open.withlens.app/post/0xf5-0x17')}
 						>
 							or try an example
 						</button>
@@ -145,7 +145,7 @@ const Home: FC = () => {
 							Built by{' '}
 							<a
 								className="font-medium"
-								href="https://lenster.xyz/u/m1guelpf.lens"
+								href="https://open.withlens.app/profile/m1guelpf.lens"
 								target="_blank"
 								rel="noreferrer"
 							>

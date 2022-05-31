@@ -13,14 +13,14 @@ const LensProfile: FC<{ profile?: Profile; isMini?: boolean; hideName?: boolean;
 	<div className={`flex items-center ${className}`}>
 		<a
 			className="mr-2 flex items-center justify-center"
-			href={`https://lenster.xyz/u/${profile?.handle}`}
+			href={`https://open.withlens.app/profile/${profile?.handle}`}
 			target="_blank"
 			rel="noreferrer"
 		>
 			<LensAvatar profile={profile} width={isMini ? 25 : 40} height={isMini ? 25 : 40} className="rounded-full" />
 		</a>
 		<a
-			href={`https://lenster.xyz/u/${profile?.handle}`}
+			href={`https://open.withlens.app/profile/${profile?.handle}`}
 			target="_blank"
 			rel="noreferrer"
 			className={`${isMini ? 'flex items-center space-x-2' : 'space-y-1'}`}

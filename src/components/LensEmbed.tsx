@@ -49,7 +49,7 @@ const LensEmbed: FC<{
 						match.getServiceName() == 'tiktok'
 					) {
 						// @ts-ignore
-						return `<a href="https://lenster.xyz/u/${match.getMention()}" target="_blank" rel="noreferrer" class="underline">@${match.getMention()}</a>`
+						return `<a href="https://open.withlens.app/profile/${match.getMention()}" target="_blank" rel="noreferrer" class="underline">@${match.getMention()}</a>`
 					}
 				},
 				mention: 'tiktok',
@@ -69,7 +69,7 @@ const LensEmbed: FC<{
 						<p className="block text-gray-500 text-sm">mirrored this post</p>
 					</div>
 					<a
-						href={`https://lenster.xyz/posts/${publication.id}`}
+						href={`https://open.withlens.app/post/${publication.id}`}
 						target="_blank"
 						className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-blue-500"
 						rel="noreferrer"
@@ -93,7 +93,7 @@ const LensEmbed: FC<{
 					/>
 					{!['Comment', 'Mirror'].includes(publication?.__typename) && !isMini && (
 						<a
-							href={publication ? `https://lenster.xyz/posts/${publication.id}` : null}
+							href={publication ? `https://open.withlens.app/post/${publication.id}` : null}
 							target="_blank"
 							className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-violet-500"
 							rel="noreferrer"
@@ -170,7 +170,7 @@ const LensEmbed: FC<{
 				</div>
 				{!isMini && (
 					<a
-						href={publication ? `https://lenster.xyz/posts/${publication.id}` : null}
+						href={publication ? `https://open.withlens.app/post/${publication.id}` : null}
 						target="_blank"
 						className="mt-2 text-sm text-gray-500 hover:underline"
 						rel="noreferrer"
@@ -190,13 +190,13 @@ const LensEmbed: FC<{
 				)}
 				{cta && (
 					<a
-						href={`https://lenster.xyz/posts/${publication?.id}`}
+						href={`https://open.withlens.app/post/${publication?.id}`}
 						target="_blank"
 						className="mt-2 py-1 px-2 border border-gray-600 rounded-full flex items-center justify-center w-full hover:bg-white/5 transition"
 						rel="noreferrer"
 					>
 						<div className="flex items-center space-x-2">
-							<p className="font-semibold text-sm text-violet-400">View on Lenster</p>
+							<p className="font-semibold text-sm text-violet-400">View on Lens</p>
 						</div>
 					</a>
 				)}
